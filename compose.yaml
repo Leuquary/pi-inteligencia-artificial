@@ -32,44 +32,12 @@ services:
     volumes:
       - ./web/exemplo:/app
 
-  grupo-1-service:
-    build: ./web/grupo-1
-    container_name: grupo-1-container
-    ports:
-      - "8001:8081"
-    volumes:
-      - ./web/grupo-1:/app
-
   grupo-2-service:
     build: ./web/grupo-2
     container_name: grupo-2-container
     ports:
       - "8002:8082"
 
-  grupo-3-service:
-    build: ./web/grupo-3
-    container_name: grupo-3-container
-    ports:
-      - "8003:8083"
-    volumes:
-      - ./web/grupo-3:/app
-
-  grupo-4-service:
-    build: ./web/grupo-4
-    container_name: grupo-4-container
-    ports:
-      - "8004:8084"
-    volumes:
-      - ./web/grupo-4:/app
- 
-  grupo-5-service:
-    build: ./web/grupo-5
-    container_name: grupo-5-container
-    ports:
-      - "8005:8085"
-    volumes:
-      - ./web/grupo-5:/app
- 
   exemplo-1-api:
     build: ./api/exemplo
     container_name: exemplo-1-api-container
@@ -83,16 +51,6 @@ services:
     environment:
       - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
 
-  grupo-1-api:
-    build: ./api/grupo-1
-    container_name: grupo-1-api-container
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./api/grupo-1:/app
-    environment:
-      - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
-
   grupo-2-api:
     build: ./api/grupo-2
     container_name: grupo-2-api-container
@@ -100,40 +58,6 @@ services:
       - "3002:3002"
     volumes:
       - ./api/grupo-2:/app
-    environment:
-      - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
-
-  grupo-3-api:
-    build: ./api/grupo-3
-    container_name: grupo-3-api-container
-    ports:
-      - "3003:3003"
-    volumes:
-      - ./api/grupo-3:/app
-    environment:
-      - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
-
-  grupo-4-api:
-    build: ./api/grupo-4
-    container_name: grupo-4-api-container
-    ports:
-      - "3004:3004"
-    volumes:
-      - ./api/grupo-4:/app
-    env_file:
-      - ./.env.grupo4  
-    environment:
-      - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
-
-  grupo-5-api:
-    build: ./api/grupo-5
-    container_name: grupo-5-api-container
-    ports:
-      - "3005:3005"
-    volumes:
-      - ./api/grupo-5:/app
-    env_file:
-      - ./.env.grupo5
     environment:
       - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
 
