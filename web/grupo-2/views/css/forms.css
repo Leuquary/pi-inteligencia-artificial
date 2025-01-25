@@ -1,9 +1,25 @@
-.form-container{
-    width: 40%;
+.form-evento__header{
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+    background-color: #5d16d01a;
+}
+
+.form-evento__header img{
+    width: 200px;
+}
+
+.form-evento__container{
+    width: 60%;
     margin: 40px auto;
-    padding: 40px 30px;
-    box-shadow: 0 0 30px 2px #74979c44;
-    border-radius: 15px;
+}
+
+.form-evento__section{
+    padding: 40px;
+    box-shadow: 0 0 15px 1px #8cb0b542;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -13,14 +29,26 @@
     margin: 0;
 }
 
-.form-container h5{
-    margin: 0 0 8px;
+.secao-form{
+    margin-bottom: 10px;
+}
+
+.secao-form h5{
+    margin-bottom: 8px;
+    font-size: 1.7rem;
+    color: #424242;
+    font-weight: 600;
+}
+
+.secao-form span{
+    color: #6d6d6d;
+    font-size: 1.2rem;
 }
 
 .form{
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
 }
 
 .form-item label{
@@ -33,7 +61,17 @@
     gap: 4px;
 }
 
-.form-item label span:nth-child(2), .secao-form span:nth-child(2){
+.form-item label{
+    color: #424242;
+}
+
+.form-item label span:nth-child(2){
     color: #6d6d6d;
     font-size: 0.9rem;
+}
+
+.form-evento__buttons{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }

@@ -18,7 +18,7 @@
     transition: all 0.2s ease;
 }
 
-/*categorias*/
+/*main__categorias*/
 .custom-button i {
     font-size: 1.5rem;
     margin-right: 8px;
@@ -43,14 +43,14 @@
     border-radius: 0;
 }
 
-/*todos os eventos*/
-.eventos h3{
+/*todos os main__eventos*/
+.main__eventos h3{
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
 }
 
-.eventos{
+.main__eventos{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -58,11 +58,11 @@
     margin-bottom: 40px;
 }
 
-.eventos__list a{
+.main__eventos-list a{
     text-decoration: none;
 }
 
-.eventos__list{
+.main__eventos-list{
     width: 80%;
     margin: 0 auto;
     display: flex;
@@ -147,11 +147,11 @@
     text-decoration: underline;
 }
 
-.categorias{
+.main__categorias{
     width: 80%;
     margin: 0 auto;
 }
-.categorias h2{
+.main__categorias h2{
     margin-bottom: 25px;
     font-size: 2rem;
     font-weight: 600;

@@ -20,12 +20,12 @@
 
 .menu-list li a {
     font-size: 1.1rem;
-    color: var(--color-title);
+    color: var(--color-purple);
     font-weight: 500;
 }
 
 .menu-list li a:hover {
-    color: var(--color-title);
+    color: var(--color-purple);
     font-weight: 600;
 }
 
@@ -56,16 +56,16 @@
     display: flex;
     gap: 20px;
     align-items: center;
-    color: var(--color-title);
+    color: var(--color-purple);
     cursor: pointer;
     font-size: 1rem;
 }
 
 .header__cadastro .button-cadastrar button {
     border-radius: 10px;
-    background-color: var(--color-title);
-    border: 1px solid var(--color-title);
-    color: var(--color-background);
+    background-color: var(--color-purple);
+    border: 1px solid var(--color-purple);
+    color: var(--color-white);
     padding: 5px 15px;
     font-weight: 500;
     transition: all 300ms;
@@ -73,13 +73,13 @@
 
 .header__cadastro .button-cadastrar button:hover {
     background: transparent; 
-    color: var(--color-title);
+    color: var(--color-purple);
     transition: all 300ms;
-    border: 1px solid var(--color-title);
+    border: 1px solid var(--color-purple);
 }
 
 .button-entrar button, .button-criar-evento button, .button-sair button{
-    color: var(--color-title);
+    color: var(--color-purple);
 }
 
 .button-criar-evento{
@@ -106,18 +106,18 @@
 }
 
 .search input{
-    caret-color: var(--color-title);
+    caret-color: var(--color-purple);
     border: none;
     background-color: transparent;
     width: 100%;
 }
 
 .search span{
-    color: var(--color-title);
+    color: var(--color-purple);
 }
 
 .header__pesquisa input::placeholder {
-    color: var(--color-title);
+    color: var(--color-purple);
 }
 
 .header__pesquisa input:focus {
