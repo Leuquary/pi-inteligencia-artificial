@@ -1,13 +1,8 @@
 /*evento em destaque*/
-.evento-destaque {
-    width: 80%;
-    margin: 30px auto;
-}
-
-.evento-destaque h2 {
-    margin-bottom: 25px;
-    font-size: 2rem;
-    font-weight: 600;
+.carousel-item img{
+    object-fit: cover;
+    height: 100%;
+    margin: 0 auto;
 }
 
 .custom-button {
@@ -44,10 +39,6 @@
     color: #007bff;
 }
 
-.my-5{
-    width: 80%;
-}
-
 .custom-button {
     border-radius: 0;
 }
@@ -55,12 +46,6 @@
 /*todos os eventos*/
 .eventos h3{
     margin: 0;
-    font-size: 2rem;
-    font-weight: 600;
-}
-
-.categorias h2{
-    margin-bottom: 25px;
     font-size: 2rem;
     font-weight: 600;
 }
@@ -152,11 +137,6 @@
     -webkit-line-clamp: 3; 
 }
 
-.categories{
-    display: flex;
-    gap: 10px;
-}
-
 .card-link {
     color: #007bff;
     font-size: 0.9rem;
@@ -167,11 +147,13 @@
     text-decoration: underline;
 }
 
-.categories {
-    font-size: 0.8rem;
-    color: #6c757d;
+.categorias{
+    width: 80%;
+    margin: 0 auto;
+}
+.categorias h2{
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 600;
 }
 
-.categorias .container{
-    padding: 0;
-}

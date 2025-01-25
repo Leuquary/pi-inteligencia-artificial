@@ -1,5 +1,4 @@
 const express = require('express')
-
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
@@ -8,10 +7,9 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const uniqueValidator = require('mongoose-unique-validator')
 
-const port = 3002
+const port = 3000
 dotenv.config()
 const uri = process.env.MONGODB_URL
-//const uri = 'mongodb://root:senha@mongo:27017/eventosgrupo2'
 
 app.use(express.json())
 app.use(cors())
@@ -103,6 +101,10 @@ const Evento = new mongoose.model('Evento', mongoose.Schema({
 }))
 
 /*Requisições*/
+app.get('/',async(_,res) => {
+    res.send("Olá mundo")
+})
+
 app.get('/eventos', async(req, res) => {
     const eventos = await Evento.find().sort({ data: -1 }).limit(3)
     res.status(201).json(eventos)
@@ -223,7 +225,6 @@ app.post('/login', async(req, res) => {
 })
 
 async function conectarAoMongo() {
-    console.log(process.env);
     await mongoose.connect(uri, {})
 }
 

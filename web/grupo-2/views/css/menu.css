@@ -1,4 +1,5 @@
 /*menu para todas as páginas*/
+@import url(vars.css);
 * {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -6,24 +7,25 @@
 }
 
 .menu-container {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
 
     display: flex;
     gap: 20px;
 }
 
-.header__menu {
-    background-color: #6b25dcb5;
+.menu-list{
+    gap: 30px;
 }
 
 .menu-list li a {
-    font-size: 1rem;
-    color: white;
+    font-size: 1.1rem;
+    color: var(--color-title);
+    font-weight: 500;
 }
 
 .menu-list li a:hover {
-    color: white;
+    color: var(--color-title);
     font-weight: 600;
 }
 
@@ -54,66 +56,81 @@
     display: flex;
     gap: 20px;
     align-items: center;
-    color: white;
+    color: var(--color-title);
     cursor: pointer;
+    font-size: 1rem;
 }
 
-.header__cadastro a:nth-child(3) button {
-    border-radius: 6px;
-    background-color: white;
-    color: #6b25dcb5;
-    border: 2px solid white;
-    padding: 5px 10px;
-    font-weight: 600;
+.header__cadastro .button-cadastrar button {
+    border-radius: 10px;
+    background-color: var(--color-title);
+    border: 1px solid var(--color-title);
+    color: var(--color-background);
+    padding: 5px 15px;
+    font-weight: 500;
     transition: all 300ms;
 }
 
-.header__cadastro a:nth-child(3) button:hover {
+.header__cadastro .button-cadastrar button:hover {
     background: transparent; 
-    color: white;
+    color: var(--color-title);
     transition: all 300ms;
+    border: 1px solid var(--color-title);
 }
 
-.header__cadastro a button {
+.button-entrar button, .button-criar-evento button, .button-sair button{
+    color: var(--color-title);
+}
+
+.button-criar-evento{
+    display: none;
+}
+
+.header__cadastro a button{
     background: transparent;
     border: none;
-    color: white;
-}
-
-.header__cadastro a button:hover {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .header__pesquisa {
     width: 50%;
 }
 
-.header__pesquisa input {
+.header__pesquisa .search {
     border-radius: 20px;
-    padding: 5px 15px;
-    border: none;
-    background: rgba(255, 255, 255, 0.415);
-    caret-color: white;
+    padding: 10px 20px;
+    background: #6d1fea2e;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
 
+.search input{
+    caret-color: var(--color-title);
+    border: none;
+    background-color: transparent;
     width: 100%;
 }
 
+.search span{
+    color: var(--color-title);
+}
+
 .header__pesquisa input::placeholder {
-    color: white;
+    color: var(--color-title);
 }
 
 .header__pesquisa input:focus {
-    border: 2px solid rgba(255, 255, 255, 0.759);
     outline: none;
-    transition: all 500ms;
 }
 
 .header__logo a {
-    margin: 0 !important;
+    margin: 0;
+    padding: 0;
 }
 
 .header__logo img {
-    width: 120px;
+    width: 200px;
 }
 
 /*modal cadastro login*/

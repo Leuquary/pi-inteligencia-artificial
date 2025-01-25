@@ -7,7 +7,7 @@
 
     <!--bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
 
     <!--estilos-->
     <link rel="stylesheet" href="css/menu.css">
@@ -22,33 +22,49 @@
     <!--icons-->
     <script src="https://kit.fontawesome.com/e2a2c1e4a6.js" crossorigin="anonymous"></script>
 </head>
-<body onload="buscarEventos()">
+<body onload="buscarEventos();verificarUsuario()">
     <div class="container-content">
+        
         <header class="header">
             <nav class="header__menu navbar navbar-expand-lg navbar-dark">
                 <div class="menu-container flex-column align-items-start">
                     <div class="header__superior">
                         <div class="header__logo">
                             <a href="#" class="navbar-brand">
-                                <img src="img/logo.png" alt="Logo">
+                                <img src="img/Divirta-se.com.png" alt="Logo">
                             </a>
                         </div>
 
                         <div class="header__pesquisa">
                             <form class="d-flex" id="search">
-                                <input type="text" type="search" placeholder="Eventos em..." aria-label="Search">
+                                <div class="search">
+                                    <span>
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                    <input type="text" type="search" placeholder="Eventos em..." aria-label="Search">
+                                </div>
                             </form>
                         </div>
 
                         <div class="header__cadastro">
-                            <a id="eventoLink" class="nav-link" href="cadastro-evento.html">
-                                <button type="button">Crie seu evento</button>
+                            <a id="eventoLink" class="nav-link button-criar-evento" href="cadastro-evento.html">
+                                <button type="button">Criar evento</button>
                             </a>
-                            <a id="loginLink" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalLogin" aria-current="page" href="#">
+                            <a id="loginLink" class="nav-link button-entrar" data-bs-toggle="modal" data-bs-target="#modalLogin" aria-current="page" href="#">
                                 <button type="button">Entrar</button>
                             </a>
-                            <a id="cadastroLink" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalCadastro" aria-current="page" href="#">
+                            <a id="cadastroLink" class="nav-link button-cadastrar" data-bs-toggle="modal" data-bs-target="#modalCadastro" aria-current="page" href="#">
                                 <button type="button">Cadastre-se</button>
+                            </a>
+
+                            <a href="#" class="nav-link icon-cadastrar">
+                                <span>
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                            </a>
+
+                            <a href="#" class="nav-link button-sair">
+                                <button type="button">Sair</button>
                             </a>
                         </div>  
                     </div>
@@ -56,10 +72,10 @@
                     <div class="header__inferior collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="menu-list navbar-nav">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">Tudo</a>
+                                <a href="#" class="nav-link">Todos os eventos</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">Em alta</a>
+                                <a href="#" class="nav-link">Eventos em alta</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">Eventos em São Paulo</a>
@@ -72,14 +88,24 @@
                 </div>
             </nav>
 
-            <section class="header__image">
-                <div class="evento-destaque">
-                    <h2>Eventos em destaque</h2>
-                    <figure>
-                        <img src="img/capa-evento.png" alt="Banner">
-                    </figure>
+            <div id="carouselEventos" class="carousel slide carousel-eventos">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="img/evento-calcinha-preta.webp" class="d-block w-100" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="img/evento-bragança.webp" class="d-block w-100" alt="...">
+                  </div>
                 </div>
-            </section>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselEventos" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselEventos" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+            </div>
 
             <!--modal login-->
             <div class="modal fade" id="modalLogin" aria-labelledby="modalLogin" aria-hidden="true">
@@ -212,33 +238,31 @@
 
         <main class="content-main">
             <section class="categorias">
-                <div class="container my-5">
-                    <h2>Confira as categorias e tendências</h2>
-                    <div class="row row-cols-2 row-cols-md-4 g-3">
-                        <div class="col">
-                            <div class="custom-button" data-category="Shows Musicais">Shows Musicais</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Restaurantes">Restaurantes</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Teatros e Artes">Teatros e Artes</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Games">Games</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Esportes">Esportes</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Bares">Bares</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Férias">Férias</div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-button" data-category="Negócios">Negócios</div>
-                        </div>
+                <h2>Confira as categorias e tendências</h2>
+                <div class="row row-cols-2 row-cols-md-4 g-3">
+                    <div class="col">
+                        <div class="custom-button" data-category="Shows Musicais">Shows Musicais</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Restaurantes">Restaurantes</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Teatros e Artes">Teatros e Artes</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Games">Games</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Esportes">Esportes</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Bares">Bares</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Férias">Férias</div>
+                    </div>
+                    <div class="col">
+                        <div class="custom-button" data-category="Negócios">Negócios</div>
                     </div>
                 </div>
             </section>
@@ -376,5 +400,8 @@
 
     <script src="js/queries.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/paginas.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
 </body>
 </html>

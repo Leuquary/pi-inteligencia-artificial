@@ -28,7 +28,7 @@ app.use(express.static('views'));
 
 app.use('/',router);
 
-const port = 8082;
+const port = 8080;
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`)
 });
