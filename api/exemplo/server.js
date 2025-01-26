@@ -63,7 +63,7 @@ app.get('/teste', (req, res) => {
 //        res.send(data)
         res.render('imagepage',{items: data})
     })
-});
+})
 
 app.post('/', upload.single('image'), (req, res, next) => {
 

@@ -19,7 +19,7 @@
 .form-evento__section{
     padding: 40px;
     box-shadow: 0 0 15px 1px #8cb0b542;
-    border-radius: 10px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -70,8 +70,32 @@
     font-size: 0.9rem;
 }
 
-.form-evento__buttons{
+.form-item .preview{
+    width: 100%;
+    margin-top: 20px;
+}
+
+.preview img{
+    width: 100%;
+    object-fit: contain;
+}
+
+.form-evento__footer{
     display: flex;
-    gap: 10px;
+    width: 100%;
     justify-content: flex-end;
+    gap: 20px;
+    align-items: center;  
+    margin-top: 20px;  
+}
+
+.form-evento__footer .alert{
+    width: 60%;  
+}
+
+.form-evento__buttons{
+    width: 40%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }

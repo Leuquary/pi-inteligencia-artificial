@@ -1,11 +1,17 @@
 const express = require('express')
-const cors = require('cors');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
+const cors = require('cors')
+const dotenv = require('dotenv')
+const mongoose = require('mongoose')
 const app = express()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const uniqueValidator = require('mongoose-unique-validator')
+
+const bodyParser = require('body-parser')
+const fs = require('fs')
+const path = require('path')
+app.set("view engine", "ejs")
+
+const { EventoModel, UsuarioModel, CategoriaModel, ImagemModel } = require('./models.js')
 
 const port = 3000
 dotenv.config()
@@ -14,106 +20,35 @@ const uri = process.env.MONGODB_URL
 app.use(express.json())
 app.use(cors())
 
-/*Schemas*/
-const PointSchema = new mongoose.Schema({
-    type: {
-        type: String,
-        enum: ['Point'],
-        required: true
-    },
-    coordinates: {
-        type: [Number],
-        required: true
-    }
-});
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-const Categoria = new mongoose.Schema({ 
-    nome: String,
-    descricao: String
-})
+const multer = require('multer')
 
-const usuarioSchema = new mongoose.Schema({
-    nomeUsuario: {
-        type: String,
-        required: true,
-        unique: true,
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads')
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    nome: {
-        type: String,
-        required: true,
-    },
-    senha: {
-        type: String,
-        required: true,
-    },
-    telefone: {
-        type: String,
-    },
-    cpf: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    logo_url: {
-        type: String
+    filename: (req, file, cb) => {
+        cb(null, file.originalname + '-' + Date.now())
     }
 })
 
-usuarioSchema.plugin(uniqueValidator)
-const Usuario = new mongoose.model('Usuario', usuarioSchema)
+var upload = multer({ storage: storage })
 
-const Evento = new mongoose.model('Evento', mongoose.Schema({
-    nome: String,
-    descricao: String,
-    usuarioId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Usuario'  
-    },
-    url_banner: String,
-    dataInicio: String,
-    dataFim: String,
-    horarioInicio: String,
-    horarioFim: String,
-    ingresso: {
-        valor: Number,
-        urlIngresso: String
-    },
-    endereco: {
-        rua: String,
-        numero: Number,
-        bairro: String,
-        estado: String,
-        cep: String,
-        complemento: String
-    },
-    local: {
-        type: PointSchema,
-        // required: true,
-        index: '2dsphere'
-    },
-    categoria: Categoria,
-    dataCriacao: Date
-}))
-
-/*Requisições*/
 app.get('/',async(_,res) => {
     res.send("Olá mundo")
 })
 
 app.get('/eventos', async(req, res) => {
-    const eventos = await Evento.find().sort({ data: -1 }).limit(3)
+    const eventos = await EventoModel.find().sort({ data: -1 }).limit(3)
     res.status(201).json(eventos)
 })
 
 app.get('/evento/:id', async(req, res) => {
     console.log(req.params.id)
     try {
-        const evento = await Evento.findById(req.params.id)
+        const evento = await EventoModel.findById(req.params.id)
         if (!evento) {
             return res.status(404).send("Evento não encontrado");
         }
@@ -126,7 +61,7 @@ app.get('/evento/:id', async(req, res) => {
 app.get('/usuario/:id', async(req, res) => {
     console.log(req.params.id)
     try {
-        const usuario = await Usuario.findById(req.params.id)
+        const usuario = await UsuarioModel.findById(req.params.id)
         if (!usuario) {
             return res.status(404).send("Usuario não encontrado");
         }
@@ -136,35 +71,101 @@ app.get('/usuario/:id', async(req, res) => {
     }
 })
 
-app.post('/evento', async(req, res) => {
-    const nome = req.body.nome
-    const descricao = req.body.descricao
-    const usuario = req.body.usuario
-    const banner = req.body.banner
-    const dataInicio = req.body.dataInicio
-    const dataFim = req.body.dataFim
-    const horarioInicio = req.body.horarioInicio
-    const horarioFim = req.body.horarioFim
-    const ingresso = req.body.ingresso
-    const endereco = req.body.endereco
-    const categoria = req.body.categoria
+app.post('/evento', upload.single('image'), async(req, res) => {
+    try {
+        const evento = new EventoModel({
+            nome: req.body.nome,
+            descricao: req.body.descricao,
+            image: {
+                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                contentType: 'image/png'
+            },
+            data: {
+                dataInicio: req.body.dataInicio,
+                dataFim: req.body.dataFim
+            },
+            horario: {
+                horarioInicio: req.body.horarioInicio,
+                horarioFim: req.body.horarioFim
+            },
+            ingresso: {
+                valor: req.body.valor,
+                urlIngresso: req.body.urlIngresso
+            },
+            endereco: {
+                rua: req.body.rua,
+                bairro: req.body.bairro,
+                numero: req.body.numero,
+                estado: req.body.estado,
+                cidade: req.body.cidade,
+                cep: req.body.cep,
+                complemento: req.body.complemento
+            },
+            categoria: {
+                nome: req.body.categoria
+            }
+        })
 
-    const evento = new Evento({
-        nome: nome,
-        descricao: descricao,
-        usuarioId: usuario._id,
-        banner: banner,
-        dataInicio: dataInicio,
-        dataFim: dataFim,
-        horarioInicio: horarioInicio,
-        horarioFim: horarioFim,
-        ingresso: ingresso,
-        endereco: endereco,
-        categoria: categoria
+        const resposta = await evento.save()
+        res.status(201).json(resposta)
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ 'message': 'Erro ao cadastrar evento' })
+    }
+})
+
+app.post('/evento/image', upload.single('image'), async(req, res) => {
+    try {
+        const evento = await EventoModel.findById(req.evento._id)
+        if (!evento) {
+            return res.status(404).send("Usuario não encontrado");
+        }
+        
+        var obj = {
+            nome: "",
+            desc: "",
+            img: {
+                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                contentType: 'image/png'
+            }
+        }
+
+        const newEvento = EventoModel({
+            evento,
+            image: obj
+        })        
+        const eventoSalvo = await newEvento.save()
+        res.status(201).json(eventoSalvo)
+    } catch (error){
+        res.status(500).send(error)
+    }
+})
+
+app.get('/evento/image', (req, res) => {
+    ImagemModel.find({})
+    .then((data, err) => {
+        if(err){
+            console.log(err)
+        }
+
+        let retorno = []
+        data.forEach(function(image) {
+            var obj = {
+                nome: "",
+                desc: "",
+                img: {
+                    data: image.img.toString('base64'),
+                    contentType: image.img.contentType
+                }
+            } 
+            retorno.push(obj)  
+        })
+        console.log(JSON.stringify(retorno))
+
+        res.setHeader('ContentType','application/json')
+        res.send(JSON.stringify(retorno))
     })
-
-    const eventoSalvo = await evento.save()
-    res.status(201).json(eventoSalvo)
 })
 
 app.post('/cadastro', async(req, res) => {
@@ -177,7 +178,7 @@ app.post('/cadastro', async(req, res) => {
         const cpf = req.body.cpf
         
         const cryptografada = await bcrypt.hash(senha, 10)
-        const usuario = new Usuario({
+        const usuario = new UsuarioModel({
             nome: nome,
             nomeUsuario: nomeUsuario,
             email: email,
@@ -200,7 +201,7 @@ app.post('/login', async(req, res) => {
         const email = req.body.email
         const senha = req.body.senha
 
-        const usuario = await Usuario.findOne({
+        const usuario = await model.UsuarioModel.findOne({
             email: email
         })
 

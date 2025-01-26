@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var serverurl = 'http://exemplo-1-api:3000/'
+var serverurl = 'http://localhost:3000/' //http://exemplo-1-api:3000/
 app.set("view engine", "ejs");
 var axios = require('axios');
 
@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
         let retorno = [];
         console.log(data.data)
         let newdata = data.data;
+        
         newdata.forEach(function(image) {
 //            const buffer = Buffer.from(image.img.data, "base64");
             var item = {

@@ -4,32 +4,29 @@ const dotenv = require('dotenv')
 const router = express.Router()
 const axios = require('axios')
 
-const path = __dirname + '/views/';
+const path = __dirname + '/views/'
 
 const app = express()
 
-var corsOptions = {
-  origin: 'https://kit.fontawesome.com/e2a2c1e4a6.js',
-  optionsSuccesStatus: 200
-}
-
-app.use(cors(corsOptions))
-
 router.use(function (req,res,next){
-  console.log('/' + req.method);
-  next();
+  console.log('/' + req.method)
+  next()
 })
 
 router.get('/', function (req,res){
-  res.sendFile(path + '/index.html');
+  res.sendFile(path + '/index.html')
 })
 
-app.use(express.static('views'));
+router.get('/cadastro-evento', function(req,res){
+    res.render('cadastro-evento')
+})
 
-app.use('/',router);
+app.use(express.static('views'))
 
-const port = 8080;
+app.use('/',router)
+
+const port = 8080
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`)
-});
+})
 

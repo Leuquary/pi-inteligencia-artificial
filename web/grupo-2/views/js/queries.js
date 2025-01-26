@@ -1,111 +1,43 @@
 const protocolo = 'http://'
 const baseURL = 'localhost:3000'
 
-async function cadastrarEvento() {
-    //pega os inputs que contém os valores que o usuário digitou
-    let nomeInput = document.querySelector('#nomeInput')
-    let descricaoInput = document.querySelector('#descricaoInput')
-    let urlBannerInput = document.querySelector('#urlBannerInput')
-    let dataInicioInput = document.querySelector('#dataInicioInput')
-    let dataFimInput = document.querySelector('#dataFimInput')
-    let horarioInicioInput = document.querySelector('#horarioInicioInput')
-    let horarioFimInput = document.querySelector('#horarioFimInput')
-    let valorInput = document.querySelector('#valorInput')
-    let urlIngressoInput = document.querySelector('#urlIngressoInput')
-    let ruaInput = document.querySelector('#ruaInput')
-    let numeroInput = document.querySelector('#numeroInput')
-    let bairroInput = document.querySelector('#bairroInput')
-    let estadoInput = document.querySelector('#estadoInput')
-    let cidadeInput = document.querySelector('#cidadeInput')
-    let cepInput = document.querySelector('#cepInput')
-    let complementoInput = document.querySelector('#complementoInput')
-    let categoriaInput = document.querySelector('#categoriaInput')
+const form = document.getElementById('form-evento')
+form.addEventListener('submit', async function (event) {
+    event.preventDefault()
 
-    //pega os valores digitados pelo usuário
-    let nome = nomeInput.value
-    let descricao = descricaoInput.value
-    let urlBanner = urlBannerInput.value
-    let dataInicio = dataInicioInput.value
-    let dataFim = dataFimInput.value
-    let horarioInicio = horarioInicioInput.value
-    let horarioFim = horarioFimInput.value
+    const form = event.target
+    const formData = new FormData(form)
 
-    let ingresso = {
-        valor: valorInput.value,
-        urlIngresso: urlIngressoInput.value
-    }
+    try {
+        const eventoEndpoint = '/evento'
+        const URLCompleta = `${protocolo}${baseURL}${eventoEndpoint}`
 
-    let endereco = {
-        rua: ruaInput.value,
-        numero: numeroInput.value,
-        bairro: bairroInput.value,
-        estado: estadoInput.value,
-        cidade: cidadeInput.value,
-        cep: cepInput.value,
-        complemento: complementoInput.value
-    }
+        const resposta = (await axios.post(URLCompleta, formData, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }))
 
-    let categoria = {
-        nome: categoriaInput.value,
-        descricao: ""
-    }
-
-    // if (!nome || !descricao || !dataInicio || !horarioInicio || !horarioFim || !endereco.bairro || !endereco.cep || !endereco.estado || !endereco.cidade || !endereco.numero || !endereco.rua){
-    //     alert("Preencha os campos obrigatórios!")
-    //     return 
-    // }
-
-    //limpa os campos que o usuário digitou
-    nomeInput.value = ""
-    descricaoInput.value = ""
-    urlBannerInput.value = ""
-    dataInicioInput.value = ""
-    dataFimInput.value = ""
-    horarioInicioInput.value = ""
-    horarioFimInput.value = ""
-    valorInput.value = ""
-    urlIngressoInput.value = ""
-    ruaInput.value = ""
-    numeroInput.value = ""
-    bairroInput.value = ""
-    estadoInput.value = ""
-    cepInput.value = ""
-    complementoInput.value = ""
-
-    const usuario = JSON.parse(localStorage.getItem("Usuario"))
-    console.log(usuario._id)
-    if(!usuario){
-        alert("Faça login antes de cadastrar um evento!")
-        return
-    }
-
-    try{
-        //envia os dados ao servidor (back end)
-        const eventosEndpoint = '/evento'
-        const URLCompleta = `${protocolo}${baseURL}${eventosEndpoint}`
-
-        const eventos = (await axios.post(URLCompleta, {
-                    nome,
-                    descricao,
-                    usuario,
-                    urlBanner,
-                    dataInicio,
-                    dataFim,
-                    horarioInicio,
-                    horarioFim,
-                    ingresso,
-                    endereco,
-                    categoria
-                }
-            )
-        ).data
-        console.log(eventos);
+        console.log(resposta)
         exibirAlerta("alert-evento","Evento cadastrado com sucesso!","alert-success")
-    }catch(error){
-        console.log(error);
+    } catch (error) {
+        console.log(error)
         exibirAlerta("alert-cadastro","Ocorreu um erro ao cadastrar evento","alert-danger")
     }
-}
+})
+
+const file = document.getElementById('image')
+const preview = document.querySelector('.preview')
+const preview_img = document.querySelector('.preview-img')
+file.addEventListener('change', function(event) {
+    preview.style.display = "block"
+    let reader = new FileReader()
+    reader.onload = () => {
+        preview_img.src = reader.result
+    }
+    reader.readAsDataURL(file.files[0])
+})
 
 async function buscarEventos(){
     const eventosEndpoint = '/eventos'
@@ -113,15 +45,15 @@ async function buscarEventos(){
     const eventos = (await axios.get(URLCompleta)).data
 
     eventos.forEach(evento => {
-        let dataInicio = evento.dataInicio 
+        let dataInicio = evento.data.dataInicio
         let dataInicioSeparada = dataInicio.split('-')
         dataInicio = `${dataInicioSeparada[2]}/${dataInicioSeparada[1]}`
-        evento.dataInicio = dataInicio
+        evento.data.dataInicio = dataInicio
 
-        let dataFim = evento.dataFim
+        let dataFim = evento.data.dataFim
         let dataFimSeparada = dataInicio.split('-')
         dataFim = `${dataFimSeparada[2]}/${dataFimSeparada[1]}`
-        evento.dataFim = dataFim
+        evento.data.dataFim = dataFim
 
         addHtml(evento)
     })
@@ -297,6 +229,3 @@ function exibirAlerta(id, alerta, classe){
     divAlerta.innerHTML = alerta
 }
 
-
-
- 
