@@ -1,62 +1,49 @@
 const protocolo = 'http://'
 const baseURL = 'localhost:3000'
 
-const form = document.getElementById('form-evento')
-form.addEventListener('submit', async function (event) {
-    event.preventDefault()
-
-    const form = event.target
-    const formData = new FormData(form)
-
-    try {
-        const eventoEndpoint = '/evento'
-        const URLCompleta = `${protocolo}${baseURL}${eventoEndpoint}`
-
-        const resposta = (await axios.post(URLCompleta, formData, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }))
-
-        console.log(resposta)
-        exibirAlerta("alert-evento","Evento cadastrado com sucesso!","alert-success")
-    } catch (error) {
-        console.log(error)
-        exibirAlerta("alert-cadastro","Ocorreu um erro ao cadastrar evento","alert-danger")
-    }
-})
-
-const file = document.getElementById('image')
-const preview = document.querySelector('.preview')
-const preview_img = document.querySelector('.preview-img')
-file.addEventListener('change', function(event) {
-    preview.style.display = "block"
-    let reader = new FileReader()
-    reader.onload = () => {
-        preview_img.src = reader.result
-    }
-    reader.readAsDataURL(file.files[0])
-})
-
 async function buscarEventos(){
     const eventosEndpoint = '/eventos'
     const URLCompleta = `${protocolo}${baseURL}${eventosEndpoint}`
-    const eventos = (await axios.get(URLCompleta)).data
+    
+    axios.get(URLCompleta)
+    .then((data, err) => {
+        let newdata = data.data
 
-    eventos.forEach(evento => {
-        let dataInicio = evento.data.dataInicio
-        let dataInicioSeparada = dataInicio.split('-')
-        dataInicio = `${dataInicioSeparada[2]}/${dataInicioSeparada[1]}`
-        evento.data.dataInicio = dataInicio
-
-        let dataFim = evento.data.dataFim
-        let dataFimSeparada = dataInicio.split('-')
-        dataFim = `${dataFimSeparada[2]}/${dataFimSeparada[1]}`
-        evento.data.dataFim = dataFim
-
-        addHtml(evento)
+        newdata.forEach(function(item) {
+            var item = {
+                nome: item.nome,
+                dataHora: {
+                    dataInicio: item.dataHora.dataInicio,
+                    dataFim: item.dataHora.dataFim,
+                    horarioInicio: item.dataHora.horarioInicio,
+                    horarioFim: item.dataHora.horarioFim
+                },
+                image: {
+                  data: item.image.data,
+                  contentType: item.image.contentType
+                },
+                categoria: {
+                    nome: item.categoria.nome
+                } 
+            }
+            console.log(item)
+            addHtml(item)
+        })
     })
+
+    // eventos.forEach(evento => {
+    //     let dataInicio = evento.dataHora.dataInicio
+    //     let dataInicioSeparada = dataInicio.split('-')
+    //     dataInicio = `${dataInicioSeparada[2]}/${dataInicioSeparada[1]}`
+    //     evento.dataHora.dataInicio = dataInicio
+
+    //     let dataFim = evento.dataHora.dataFim
+    //     let dataFimSeparada = dataInicio.split('-')
+    //     dataFim = `${dataFimSeparada[2]}/${dataFimSeparada[1]}`
+    //     evento.dataHora.dataFim = dataFim
+
+    //     addHtml(evento)
+    // })
 }
 
 function addHtml(evento){
@@ -65,12 +52,14 @@ function addHtml(evento){
     eventoHtml.dataset.eventoId = evento._id
     eventoHtml.dataset.eventoNome = evento.nome
 
+    const imageSrc = `data:${evento.image.contentType};base64,${evento.image.data}`
+
     eventoHtml.innerHTML = `
         <div class="card">
-            <img src="img/capa-evento.png" class="card-img-top" alt="Imagem do evento">
+            <img src="${imageSrc}" class="card-img-top" alt="Imagem do evento">
             <div class="card-body">
                 <h5 class="card-title">${evento.nome}</h5>
-                <h6 class="card-subtitle">${evento.dataInicio} - ${evento.horarioInicio}</h6>
+                <h6 class="card-subtitle">${evento.dataHora.dataInicio} - ${evento.dataHora.horarioInicio}</h6>
                 <p class="card-text">${evento.descricao}</p>
                 <div class="categories">
                     <span class="card-link">${evento.categoria.nome}</span>

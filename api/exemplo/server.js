@@ -48,7 +48,6 @@ app.get('/', (req, res) => {
         console.log(JSON.stringify(retorno))
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(retorno))
-//        res.render('imagepage',{items: data})
     })
 });
 

@@ -40,11 +40,6 @@ app.get('/',async(_,res) => {
     res.send("Olá mundo")
 })
 
-app.get('/eventos', async(req, res) => {
-    const eventos = await EventoModel.find().sort({ data: -1 }).limit(3)
-    res.status(201).json(eventos)
-})
-
 app.get('/evento/:id', async(req, res) => {
     console.log(req.params.id)
     try {
@@ -71,7 +66,7 @@ app.get('/usuario/:id', async(req, res) => {
     }
 })
 
-app.post('/evento', upload.single('image'), async(req, res) => {
+app.post('/eventos', upload.single('image'), async(req, res) => {
     try {
         const evento = new EventoModel({
             nome: req.body.nome,
@@ -80,11 +75,9 @@ app.post('/evento', upload.single('image'), async(req, res) => {
                 data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
                 contentType: 'image/png'
             },
-            data: {
+            dataHora: {
                 dataInicio: req.body.dataInicio,
-                dataFim: req.body.dataFim
-            },
-            horario: {
+                dataFim: req.body.dataFim,
                 horarioInicio: req.body.horarioInicio,
                 horarioFim: req.body.horarioFim
             },
@@ -115,55 +108,38 @@ app.post('/evento', upload.single('image'), async(req, res) => {
     }
 })
 
-app.post('/evento/image', upload.single('image'), async(req, res) => {
-    try {
-        const evento = await EventoModel.findById(req.evento._id)
-        if (!evento) {
-            return res.status(404).send("Usuario não encontrado");
-        }
-        
-        var obj = {
-            nome: "",
-            desc: "",
-            img: {
-                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-                contentType: 'image/png'
-            }
-        }
-
-        const newEvento = EventoModel({
-            evento,
-            image: obj
-        })        
-        const eventoSalvo = await newEvento.save()
-        res.status(201).json(eventoSalvo)
-    } catch (error){
-        res.status(500).send(error)
-    }
+app.get('/eventos/recentes', async(req, res) => {
+    const eventos = await EventoModel.find().sort({ data: -1 }).limit(3)
+    res.status(201).json(eventos)
 })
 
-app.get('/evento/image', (req, res) => {
-    ImagemModel.find({})
+app.get('/eventos', async(req, res) => {
+    EventoModel.find({})
     .then((data, err) => {
-        if(err){
-            console.log(err)
-        }
-
         let retorno = []
-        data.forEach(function(image) {
-            var obj = {
-                nome: "",
-                desc: "",
-                img: {
-                    data: image.img.toString('base64'),
-                    contentType: image.img.contentType
+        data.forEach(function(item) {
+            var item = {
+                nome: item.nome,
+                descricao: item.descricao,
+                dataHora: {
+                    dataInicio: item.dataHora.dataInicio,
+                    dataFim: item.dataHora.dataFim,
+                    horarioInicio: item.dataHora.horarioInicio,
+                    horarioFim: item.dataHora.horarioFim
+                },
+                image: {
+                    data: item.image.data.toString('base64'),
+                    contentType: item.image.contentType
+                },
+                categoria: {
+                    nome: item.categoria.nome
                 }
-            } 
-            retorno.push(obj)  
+            }
+            retorno.push(item)
         })
-        console.log(JSON.stringify(retorno))
 
-        res.setHeader('ContentType','application/json')
+        console.log(JSON.stringify(retorno))
+        res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(retorno))
     })
 })

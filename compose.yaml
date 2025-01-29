@@ -28,7 +28,7 @@ services:
     build: ./web/exemplo
     container_name: exemplo-1-container
     ports:
-      - "8000:8080"
+      - "8002:8082"
     volumes:
       - ./web/exemplo:/app
 
@@ -36,18 +36,18 @@ services:
     build: ./web/grupo-2
     container_name: grupo-2-container
     ports:
-      - "8002:8082"
+      - "8000:8080"
 
   exemplo-1-api:
     build: ./api/exemplo
     container_name: exemplo-1-api-container
     ports:
-      - "3000:3000"
+      - "3002:3002"
     volumes:
       - ./api/exemplo:/app
       - ./api/exemplo/uploads:/app/uploads
     env_file:
-      - ./.env.exemplo
+      - ./api/exemplo/.env
     environment:
       - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
 
@@ -55,9 +55,11 @@ services:
     build: ./api/grupo-2
     container_name: grupo-2-api-container
     ports:
-      - "3002:3002"
+      - "3000:3000"
     volumes:
       - ./api/grupo-2:/app
+    env_file: 
+      - ./api/grupo-2/.env
     environment:
       - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
 

@@ -20,6 +20,6 @@ RUN npm install
 COPY --chown=node:node . .
 
 #Vamos expor a porta 8080 do container
-EXPOSE 8081
+EXPOSE 8080
 
 CMD ["node", "webserver.js"]

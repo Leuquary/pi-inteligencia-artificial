@@ -59,11 +59,9 @@ const eventoSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    data: {
+    dataHora: {
         dataInicio: String,
         dataFim: String,
-    },
-    horario: {
         horarioInicio: String,
         horarioFim: String,
     },
