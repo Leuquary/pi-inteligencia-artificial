@@ -1,5 +1,5 @@
 const protocolo = 'http://'
-const baseURL = 'localhost:3000'
+const baseURL = 'localhost:3001'
 
 async function buscarEventos(){
     const eventosEndpoint = '/eventos'

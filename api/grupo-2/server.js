@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const app = express()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+dotenv.config()
 
 const bodyParser = require('body-parser')
 const fs = require('fs')
@@ -13,9 +14,8 @@ app.set("view engine", "ejs")
 
 const { EventoModel, UsuarioModel, CategoriaModel, ImagemModel } = require('./models.js')
 
-const port = 3000
-dotenv.config()
-const uri = process.env.MONGODB_URL
+mongoose.connect(process.env.MONGODB_URL)
+.then(console.log("DB Connected"))
 
 app.use(express.json())
 app.use(cors())
@@ -201,15 +201,22 @@ app.post('/login', async(req, res) => {
     }
 })
 
-async function conectarAoMongo() {
-    await mongoose.connect(uri, {})
-}
+// async function conectarAoMongo() {
+//     await mongoose.connect(uri, {})
+// }
 
-app.listen(port, () => {
-    try {
-        conectarAoMongo()
-        console.log(`Servidor rodando na port ${port}`)
-    } catch (error) {
-        console.log("Erro", error)
-    }
+// app.listen(port, () => {
+//     try {
+//         conectarAoMongo()
+//         console.log(`Servidor rodando na port ${port}`)
+//     } catch (error) {
+//         console.log("Erro", error)
+//     }
+// })
+
+var port = process.env.PORT || '3001'
+app.listen(port, err => {
+    if (err)
+        throw err
+    console.log('Server listening on port', port)
 })

@@ -13,6 +13,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: senha
       MONGO_INITDB_DATABASE: admin
+      
   mongo-express:
     image: mongo-express
     restart: always
@@ -24,38 +25,24 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:senha@mongo:27017/
       ME_CONFIG_BASICAUTH_ENABLED: false      
 
-  exemplo-1-service:
-    build: ./web/exemplo
-    container_name: exemplo-1-container
-    ports:
-      - "8002:8082"
-    volumes:
-      - ./web/exemplo:/app
-
-  grupo-2-service:
+  grupo-2-webserver:
     build: ./web/grupo-2
-    container_name: grupo-2-container
+    container_name: grupo-2-webserver
     ports:
       - "8000:8080"
-
-  exemplo-1-api:
-    build: ./api/exemplo
-    container_name: exemplo-1-api-container
-    ports:
-      - "3002:3002"
     volumes:
-      - ./api/exemplo:/app
-      - ./api/exemplo/uploads:/app/uploads
-    env_file:
-      - ./api/exemplo/.env
-    environment:
-      - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
-
+      - ./web/grupo-2:/app
+    depends_on:
+      - grupo-2-api
+    
   grupo-2-api:
     build: ./api/grupo-2
-    container_name: grupo-2-api-container
+    container_name: grupo-2-api
     ports:
-      - "3000:3000"
+      - "3000:3001"
+    depends_on: 
+      - mongo
+      - mongo-express
     volumes:
       - ./api/grupo-2:/app
     env_file: 
@@ -79,24 +66,45 @@ services:
     volumes:
       - ./api-ia/backend-image/images:/images
 
-  backend-files:
-    build:
-      context: api-ia/backend-files
-      dockerfile: Dockerfile
-    ports:
-      - 9000:9000
-    develop:
-      watch:
-      - action: sync
-        path: ./api-ia/backend-files/app/webservice.py
-        target: /app/webservice.py
-    volumes:
-      - /app
+  # exemplo-1-api:
+  #   build: ./api/exemplo
+  #   container_name: exemplo-1-api-container
+  #   ports:
+  #     - "3002:3002"
+  #   volumes:
+  #     - ./api/exemplo:/app
+  #     - ./api/exemplo/uploads:/app/uploads
+  #   env_file:
+  #     - ./api/exemplo/.env
+  #   environment:
+  #     - MONGODB_URL=${MONGODB_URL:-mongodb://root:senha@mongo:27017/}
 
-  whisper-webservice:
-    ports:
-      - '9002:9000'
-    environment:
-      - ASR_MODEL=base
-      - ASR_ENGINE=openai_whisper
-    image: 'onerahmet/openai-whisper-asr-webservice:latest'
+    # exemplo-1-service:
+  #   build: ./web/exemplo
+  #   container_name: exemplo-1-container
+  #   ports:
+  #     - "8002:8082"
+  #   volumes:
+  #     - ./web/exemplo:/app
+
+  # backend-files:
+  #   build:
+  #     context: api-ia/backend-files
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 9000:9000
+  #   develop:
+  #     watch:
+  #     - action: sync
+  #       path: ./api-ia/backend-files/app/webservice.py
+  #       target: /app/webservice.py
+  #   volumes:
+  #     - /app
+
+  # whisper-webservice:
+  #   ports:
+  #     - '9002:9002'
+  #   environment:
+  #     - ASR_MODEL=base
+  #     - ASR_ENGINE=openai_whisper
+  #   image: 'onerahmet/openai-whisper-asr-webservice:latest'

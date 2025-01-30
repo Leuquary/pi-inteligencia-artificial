@@ -15,6 +15,7 @@ USER node
 
 #Instalar as dependências do projeto
 RUN npm install
+RUN npm install axios
 
 #Copiar os arquivos do projeto para dentro do container
 COPY --chown=node:node . .

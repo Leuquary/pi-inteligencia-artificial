@@ -15,11 +15,12 @@ USER node
 
 #Instalar as dependências do projeto
 RUN npm install
+RUN npm install axios
 
 #Copiar os arquivos do projeto para dentro do container
 COPY --chown=node:node . .
 
 #Vamos expor a porta 8080 do container
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["node", "server.js"]
