@@ -46,7 +46,7 @@ function exibirAlerta(id, alerta, classe){
 }
 
 
-const GEMINI_KEY = "";
+const GEMINI_KEY = "AIzaSyDOUPAW5g1QeSES72fG_I7iyHg4UCoi0ws";
   
 async function geminiDescricao(nome, categoria) {
     try {

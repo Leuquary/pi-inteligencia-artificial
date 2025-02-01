@@ -106,7 +106,7 @@ async function salvarEvento(req) {
             nome: req.body.nome,
             descricao: req.body.descricao,
             image: {
-                data: fs.readFileSync(caminhoImagem),
+                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
                 contentType: 'image/png'
             },
             dataHora: {
@@ -149,13 +149,12 @@ async function salvarImagemEvento(req,res) {
     let id = evento.id
     var obj = {
         eventoId: id,
-        desc: imagemProcessada,
         img: {
             data: fs.readFileSync(caminhoImagem),
             contentType: 'image/png'
         }
     }
-
+    console.log(imagemProcessada)
     ImageModel.create(obj)
     .then((data) => {
         console.log(data)
@@ -168,16 +167,18 @@ async function salvarImagemEvento(req,res) {
 async function processarImagem(caminhoImagem) {
     const formData = new FormData()
     formData.append("image_file",fs.createReadStream(caminhoImagem))
-    try {
-        const headers = formData.getHeaders?.() ?? { 'Content-Type': 'multipart/form-data' }
-        const response = await axios.post('http://backend-image:9001/imagens', formData, {
-            headers: headers
-        })
-        return response
-    } catch (error) {
-        console.log(error)
+    const headers = formData.getHeaders?.() ?? { 'Content-Type': 'multipart/form-data' }
+    await axios.post('http://backend-image:9001/imagens', formData, {
+        headers: headers
+    })
+    .then(result => {
+        console.log(result.data)
+        return result
+    })
+    .catch(err => {
+        console.log(err.response.data)
         return false
-    }
+    })
 }
 
 app.get('/eventos/recentes', async(req, res) => {

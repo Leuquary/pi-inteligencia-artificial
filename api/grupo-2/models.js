@@ -111,5 +111,6 @@ module.exports = {
     EventoModel,
     UsuarioModel,
     PointModel,
-    CategoriaModel
+    CategoriaModel,
+    ImageModel
 }
