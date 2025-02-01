@@ -34,7 +34,7 @@
             </div>
             
             <div class="form-evento__container">
-                <form class="form" id="form-evento" action="http://localhost:3001/" method="POST" enctype="multipart/form-data">
+                <form class="form" id="form-evento" action="http://localhost:3000/processar-imagem" method="POST" enctype="multipart/form-data">
                     <section class="form-evento__section">
                         <div class="secao-form">
                             <h5>1. Dados do evento</h5>
@@ -51,6 +51,7 @@
                             <div class="input-group">
                                 <textarea type="text" placeholder="Digite a descrição do evento" class="form-control" id="descricao" name="descricao"></textarea>
                             </div>
+                            <button type="button" id="btnGerarDescricao">Gerar descrição</button>
                         </div>
                         <div class="form-item">
                             <label>
@@ -214,6 +215,7 @@
                             <div class="form-evento__buttons">
                                 <button type="submit" class="btn btn-success">Publicar evento</button>
                                 <button type="submit" class="btn btn-outline-success">Salvar rascunho</button>
+                                <button type="submit" class="btn btn-success">Processar imagem</button>
                             </div>
                         </div>
                     </section>

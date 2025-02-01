@@ -6,13 +6,15 @@ const app = express()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 dotenv.config()
+const formData = require('form-data')
 
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const path = require('path')
 app.set("view engine", "ejs")
+const axios = require('axios')
 
-const { EventoModel, UsuarioModel, CategoriaModel, ImagemModel } = require('./models.js')
+const { EventoModel, UsuarioModel, ImageModel } = require('./models.js')
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(console.log("DB Connected"))
@@ -68,11 +70,12 @@ app.get('/usuario/:id', async(req, res) => {
 
 app.post('/eventos', upload.single('image'), async(req, res) => {
     try {
+        const caminhoImagem = path.join(__dirname + '/uploads/' + req.file.filename)
         const evento = new EventoModel({
             nome: req.body.nome,
             descricao: req.body.descricao,
             image: {
-                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                data: fs.readFileSync(caminhoImagem),
                 contentType: 'image/png'
             },
             dataHora: {
@@ -99,6 +102,8 @@ app.post('/eventos', upload.single('image'), async(req, res) => {
             }
         })
 
+        processarImagem(caminhoImagem)
+
         const resposta = await evento.save()
         res.status(201).json(resposta)
         
@@ -107,6 +112,19 @@ app.post('/eventos', upload.single('image'), async(req, res) => {
         res.status(500).json({ 'message': 'Erro ao cadastrar evento' })
     }
 })
+
+async function processarImagem(caminhoImagem) {
+    const formData = new FormData()
+    formData.append('image_file',fs.createReadStream(caminhoImagem))
+    try {
+        const response = await axios.post('http://backend-image:9001/imagens', formData, {
+            headers: formData.getHeaders()
+        })
+        console.log(response)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 app.get('/eventos/recentes', async(req, res) => {
     const eventos = await EventoModel.find().sort({ data: -1 }).limit(3)
@@ -200,19 +218,6 @@ app.post('/login', async(req, res) => {
         res.status(409).send("Erro ao fazer login")
     }
 })
-
-// async function conectarAoMongo() {
-//     await mongoose.connect(uri, {})
-// }
-
-// app.listen(port, () => {
-//     try {
-//         conectarAoMongo()
-//         console.log(`Servidor rodando na port ${port}`)
-//     } catch (error) {
-//         console.log("Erro", error)
-//     }
-// })
 
 var port = process.env.PORT || '3001'
 app.listen(port, err => {

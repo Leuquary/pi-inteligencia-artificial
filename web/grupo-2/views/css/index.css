@@ -56,6 +56,7 @@
     flex-direction: column;
     gap: 40px;
     margin-bottom: 40px;
+    margin-top: 25px;
 }
 
 .main__eventos-list a{
@@ -152,6 +153,7 @@
     margin: 0 auto;
 }
 .main__categorias h2{
+    margin-top: 25px;
     margin-bottom: 25px;
     font-size: 2rem;
     font-weight: 600;

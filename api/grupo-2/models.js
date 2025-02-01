@@ -13,6 +13,17 @@ const pointSchema = new mongoose.Schema({
     }
 })
 
+const imageSchema = new mongoose.Schema({
+    eventoId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Evento'
+    },
+    img: {
+        data: Buffer,
+        contentType: String
+    }
+})
+
 const categoriaSchema = new mongoose.Schema({ 
     nome: String,
     descricao: String
@@ -93,6 +104,7 @@ const EventoModel = mongoose.model('EventoModel', eventoSchema)
 const UsuarioModel = mongoose.model('UsuarioModel', usuarioSchema)
 const PointModel = mongoose.model('PointModel', pointSchema)
 const CategoriaModel = mongoose.model('CategoriaModel', categoriaSchema)
+const ImageModel = mongoose.model('ImageModel', imageSchema)
 
 module.exports = {
     EventoModel,
