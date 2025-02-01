@@ -18,6 +18,7 @@ const imageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Evento'
     },
+    desc: String,
     img: {
         data: Buffer,
         contentType: String

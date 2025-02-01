@@ -6,7 +6,6 @@ const app = express()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 dotenv.config()
-const formData = require('form-data')
 
 const bodyParser = require('body-parser')
 const fs = require('fs')
@@ -29,14 +28,32 @@ const multer = require('multer')
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads')
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname + '-' + Date.now())
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 })
 
-var upload = multer({ storage: storage })
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 100000000 }, 
+    fileFilter: function(req, file, cb) {
+        checkFileType(file, cb);
+    }
+}).single('image')
+
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+  
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb('Error: Images only! (jpeg, jpg, png, gif)');
+    }
+}
 
 app.get('/',async(_,res) => {
     res.send("Olá mundo")
@@ -68,9 +85,23 @@ app.get('/usuario/:id', async(req, res) => {
     }
 })
 
-app.post('/eventos', upload.single('image'), async(req, res) => {
+app.post('/eventos', async(req, res) => {
+    upload(req, res, (err) => {
+        if(err){
+            res.send(err)
+        }else{
+            if(!req.file){
+                return res.status(400).status({ error: 'Nenhum arquivo enviado!' })
+            }
+            salvarImagemEvento(req,res)
+            // res.redirect('http://localhost:8000/')
+            res.send('Imagem processada')
+        }
+    })
+})
+
+async function salvarEvento(req) {
     try {
-        const caminhoImagem = path.join(__dirname + '/uploads/' + req.file.filename)
         const evento = new EventoModel({
             nome: req.body.nome,
             descricao: req.body.descricao,
@@ -102,27 +133,50 @@ app.post('/eventos', upload.single('image'), async(req, res) => {
             }
         })
 
-        processarImagem(caminhoImagem)
-
         const resposta = await evento.save()
-        res.status(201).json(resposta)
-        
+        return resposta
     } catch (error) {
         console.log(error)
-        res.status(500).json({ 'message': 'Erro ao cadastrar evento' })
+        throw error
+    }   
+}
+
+async function salvarImagemEvento(req,res) {
+    const caminhoImagem = path.join(__dirname + '/uploads/' + req.file.filename)
+    const imagemProcessada = await processarImagem(caminhoImagem)
+    const evento = await salvarEvento(req)
+
+    let id = evento.id
+    var obj = {
+        eventoId: id,
+        desc: imagemProcessada,
+        img: {
+            data: fs.readFileSync(caminhoImagem),
+            contentType: 'image/png'
+        }
     }
-})
+
+    ImageModel.create(obj)
+    .then((data) => {
+        console.log(data)
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+}
 
 async function processarImagem(caminhoImagem) {
     const formData = new FormData()
-    formData.append('image_file',fs.createReadStream(caminhoImagem))
+    formData.append("image_file",fs.createReadStream(caminhoImagem))
     try {
+        const headers = formData.getHeaders?.() ?? { 'Content-Type': 'multipart/form-data' }
         const response = await axios.post('http://backend-image:9001/imagens', formData, {
-            headers: formData.getHeaders()
+            headers: headers
         })
-        console.log(response)
+        return response
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 

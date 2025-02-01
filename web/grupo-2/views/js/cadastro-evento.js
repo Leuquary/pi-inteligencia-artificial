@@ -1,27 +1,28 @@
 const protocolo = 'http://'
 const baseURL = 'localhost:3000'
 
-const form = document.getElementById("form-evento")
-form.addEventListener('submit', async function (event) {
-    event.preventDefault()
+// const form = document.getElementById("form-evento")
+// form.addEventListener('submit', async function (event) {
+//     event.preventDefault()
 
-    const form = event.target
-    const formData = new FormData(form)
+//     const form = event.target
+//     const formData = new FormData(form)
 
-    try {
-        const eventoEndpoint = '/eventos'
-        const URLCompleta = `${protocolo}${baseURL}${eventoEndpoint}`
+//     try {
+//         const eventoEndpoint = '/eventos'
+//         const URLCompleta = `${protocolo}${baseURL}${eventoEndpoint}`
 
-        const resposta = (await axios.post(URLCompleta, formData, {
-            method: 'POST'
-        }))
-        console.log(resposta)
-        exibirAlerta("alert-evento","Evento cadastrado com sucesso!","alert-success")
-    } catch (error) {
-        console.log(error)
-        exibirAlerta("alert-cadastro","Ocorreu um erro ao cadastrar evento","alert-danger")
-    }
-})
+//         const resposta = (await axios.post(URLCompleta, formData, {
+//             method: 'POST'
+//         }))
+
+//         console.log(resposta)
+//         exibirAlerta("alert-evento","Evento cadastrado com sucesso!","alert-success")
+//     } catch (error) {
+//         console.log(error)
+//         exibirAlerta("alert-cadastro","Ocorreu um erro ao cadastrar evento","alert-danger")
+//     }
+// })
 
 /*fazer o upload aparecer*/
 const file = document.getElementById('image')
@@ -39,14 +40,13 @@ file.addEventListener('change', function(event) {
 
 function exibirAlerta(id, alerta, classe){
     let divAlerta = document.getElementById(id)
-    console.log(divAlerta)
     divAlerta.style.display = "block"
     divAlerta.classList.add(classe) 
     divAlerta.innerHTML = alerta
 }
 
 
-const GEMINI_KEY = "AIzaSyDOUPAW5g1QeSES72fG_I7iyHg4UCoi0ws";
+const GEMINI_KEY = "";
   
 async function geminiDescricao(nome, categoria) {
     try {
