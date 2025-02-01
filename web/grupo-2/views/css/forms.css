@@ -25,6 +25,10 @@
     gap: 20px;
 }
 
+#btnGerarDescricao{
+    margin-top: 10px;
+}
+
 .alert{
     margin: 0;
 }
