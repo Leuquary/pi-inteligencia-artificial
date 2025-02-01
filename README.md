@@ -1,7 +1,7 @@
-# Contextualização:
+# Contextualização
 O projeto Divirtase.com consiste em uma Plataforma para divulgar e gerenciar eventos. Essa solução tem como objetivo permitir que os organizadores de eventos possam criar, gerenciar e divulgar seus eventos para o público alvo, e que os usuários consigam explorar seus interesses e conhecer lugares novos.
 
-# Funcionalidades:
+# Funcionalidades
 - Criação e manutenção de eventos
 - Exibição de eventos na Timeline
 - Cadastro de usuários
