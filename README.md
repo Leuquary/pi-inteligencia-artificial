@@ -13,3 +13,6 @@ As tecnologias usadas para o desenvolvimento são: Bootstrap e HTML/CSS para o F
 # Público alvo
 - Organizadores de eventos
 - Pessoas interessadas em experiências diversas
+
+# Como executar o projeto
+Primeiro, deve-se executar o arquivo docker compose para que os containers sejam gerados. Depois, deve-se acessar o container grupo-2-webserver. Em seguida, o usuário pode se cadastrar e cadastrar um evento, usando recursos de IA, o usuário pode gerar uma descrição com base no nome do evento e na categoria, clicando no botão "Gerar descrição". Após enviar o evento, a imagem será processada por outra inteligência artificial.
