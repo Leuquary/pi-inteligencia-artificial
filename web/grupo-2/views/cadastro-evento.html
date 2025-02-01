@@ -59,10 +59,25 @@
                                 <span>Insira a url da imagem do seu banner (opcional)</span>
                             </label>
                             <div class="input-group">
-                                <input type="file" class="form-control" id="image" name="image">
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
                             </div>
                             <div class="preview" style="display: none;">
                                 <img src="" alt="" class="preview-img">
+                            </div>
+                        </div>
+
+                        <div class="form-item">
+                            <label>Categoria</label>
+                            <div class="categorias">
+                                <select name="select" class="form-select" id="categoria" name="categoria">
+                                    <option value="Nenhuma">Nenhuma</option>
+                                    <option value="Educativo">Educativo</option>
+                                    <option value="Show">Show</option>
+                                    <option value="Esportes">Esportes</option>
+                                    <option value="Bazar">Bazar</option>
+                                    <option value="Restaurantes">Restaurantes e Bares</option>
+                                    <option value="Humor">Humor</option>
+                                  </select>
                             </div>
                         </div>
                     </section>
@@ -194,21 +209,7 @@
                                 <input type="text" class="form-control" placeholder="Digite o Complemento do endereço" id="complemento" name="complemento">
                             </div>
                         </div>
-                        <div class="form-item">
-                            <label>Categoria</label>
-                            <div class="categorias">
-                                <select name="select" class="form-select" id="categoria" name="categoria">
-                                    <option value="Nenhuma">Nenhuma</option>
-                                    <option value="Educativo">Educativo</option>
-                                    <option value="Show">Show</option>
-                                    <option value="Esportes">Esportes</option>
-                                    <option value="Bazar">Bazar</option>
-                                    <option value="Restaurantes">Restaurantes e Bares</option>
-                                    <option value="Humor">Humor</option>
-                                  </select>
-                            </div>
-                        </div>
-                        
+                    
                         <div class="form-evento__footer">
                             <div class="alert" role="alert" id="alert-evento" style="display: none;">
                             </div>
